@@ -1,20 +1,40 @@
 {
   "pages": [
     "pages/index/index",
+    "pages/home/index",
     "pages/userConsole/userConsole",
     "pages/storageConsole/storageConsole",
     "pages/databaseGuide/databaseGuide",
     "pages/addFunction/addFunction",
     "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi"
+    "pages/openapi/openapi",
+    "pages/setup/setup"
   ],
   "window": {
     "backgroundColor": "#F6F6F6",
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ff5722",
-    "navigationBarTitleText": "云开发 QuickStart",
+    "navigationBarBackgroundColor": "#ff461f",
+    "navigationBarTitleText": "资金管理",
     "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#808080",
+    "selectedColor": "#ed5736",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "资产",
+        "iconPath": "images/icons/asset.png",
+        "selectedIconPath": "images/icons/asset_active.png"
+      },
+      {
+        "pagePath": "pages/setup/setup",
+        "text": "设置",
+        "iconPath": "images/icons/setup.png",
+        "selectedIconPath": "images/icons/setup_active.png"
+      }
+    ]
   },
   "sitemapLocation": "sitemap.json"
 }

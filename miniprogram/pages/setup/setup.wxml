@@ -1,0 +1,18 @@
+<view class='header'>
+  <view class='avatar'>
+    <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" style="background-image: url({{avatarUrl}})"></button>
+  </view>
+  <view class='nick'>
+    <text>{{userInfo.nickName}}</text>
+  </view>
+</view>
+<view class='info'>
+  <view class='info-item'>
+    <view class='info-label'>系统信息</view>
+    <view class='info-content'>{{sysInfo}}</view>
+  </view>
+  <view class='info-item'>
+    <view class='info-label'>系统信息</view>
+    <view class='info-content'>{{sysInfo}}</view>
+  </view>
+</view>

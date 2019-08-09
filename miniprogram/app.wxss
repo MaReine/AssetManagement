@@ -1,19 +1,30 @@
-/**app.wxss**/
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  box-sizing: border-box;
-} 
+/** iconfont start**/
 
-button {
-  background: initial;
+@font-face {
+  font-family: 'as'; /* project id 1012687 */
+  src: url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.eot');
+  src: url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.eot?#iefix') format('embedded-opentype'),
+         url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.woff2') format('woff2'),
+         url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.woff') format('woff'),
+         url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.ttf') format('truetype'),
+         url('//at.alicdn.com/t/font_1012687_a5kgxvd1k0v.svg#as') format('svg');
 }
 
-button:focus{
-  outline: 0;
+.as {
+  font-family: "as" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-button::after{
-  border: none;
+.icon-zengjia:before {
+  content: "\e684";
+}
+
+/** iconfont end**/
+
+page {
+  font-size: 32rpx;
+  background-color: #f6f6f6;
 }

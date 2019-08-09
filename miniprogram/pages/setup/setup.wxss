@@ -1,0 +1,53 @@
+.header {
+  padding-bottom: 32rpx;
+  background-color: #ff461f;
+}
+
+.header .avatar {
+  margin-bottom: 16rpx;
+}
+
+.header .avatar button {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 50%;
+  background-size: cover;
+}
+
+.header .avatar button::after {
+  border: none;
+}
+
+.header .nick {
+  text-align: center;
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.info {
+  margin-top: 32rpx;
+  width: 100%;
+  border-top: 1px solid #dcdfe6;
+}
+
+.info-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16rpx 0;
+  width: 100%;
+  background-color: #fff;
+  font-size: 32rpx;
+  color: #303133;
+  border-bottom: 1px solid #dcdfe6;
+}
+
+.info-label {
+  padding-left: 32px;
+  width: 30%;
+}
+
+.info-content {
+  padding-right: 32px;
+  width: 70%;
+}
