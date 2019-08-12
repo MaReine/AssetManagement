@@ -12,19 +12,24 @@
 
 .as {
   font-family: "as" !important;
-  font-size: 16px;
+  font-size: 32rpx;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  vertical-align: middle;
 }
 
 .icon-zengjia:before {
   content: "\e684";
 }
 
+.icon-jinru:before {
+  content: "\e60c";
+}
+
 /** iconfont end**/
 
 page {
   font-size: 32rpx;
-  background-color: #f6f6f6;
+  background-color: #F0F0F0;
 }

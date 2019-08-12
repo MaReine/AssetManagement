@@ -1,4 +1,4 @@
-// miniprogram/pages/index/index.js
+// miniprogram/pages/addAccount/addAccount.js
 Page({
 
   /**
@@ -7,14 +7,7 @@ Page({
   data: {
 
   },
-  /**
-   * 跳转新增账户页面
-   */
-  addAccount: function () {
-    wx.navigateTo({
-      url: '../addAccount/addAccount'
-    })
-  },
+
   /**
    * 生命周期函数--监听页面加载
    */

@@ -1,22 +1,124 @@
 .total {
   padding-bottom: 16rpx;
-  background-color: #ff461f;
+  background-color: #fc4c4c;
   color: #fff;
   text-align: center;
 }
 
 .total .money {
   font-size: 48rpx;
+  font-weight: bold;
 }
 
-.asset-mod {
+.sub-total {
+  display: flex;
+  background-color: #fc5757;
+  color: #fff;
+}
+
+.sub-total .item {
+  flex: 1;
+  padding: 16rpx 0 16rpx 32rpx;
+}
+
+.sub-total .item .label {
+  font-size: 24rpx;
+}
+
+.sub-total .item .money {
+  font-size: 28rpx;
+}
+
+.account-group {
+  margin-top: 16rpx;
+}
+
+.account-group .group-label {
+  position: relative;
+  padding: 16rpx 32rpx 16rpx 64rpx;
+  color: #323232;
   background-color: #fff;
+}
+
+.account-group .group-label::before {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 16rpx;
+  left: 32rpx;
+  bottom: 16rpx;
+  width: 16rpx;
+  background-color: #fc4c4c;
+}
+
+.account-list {
+  display: flex;
+  padding: 16rpx 0;
+  border-top: 1px solid #dcdcdc;
+  background-color: #fff;
+}
+
+.account-list .left {
+  padding-left: 32rpx;
+  width: 75%;
+}
+
+.account-list .right {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 25%;
+  color: #8e8e8e;
+}
+
+.account-list .right .date {
+  font-size: 24rpx;
+}
+
+.account-list .account-name {
+  margin-bottom: 16rpx;
+  color: #323232;
+}
+
+.account-list .account-info {
+  display: flex;
+}
+
+.account-list .account-info .info-label {
+  font-size: 24rpx;
+  color: #8e8e8e;
+}
+
+.account-list .account-info .info-item:first-child {
+  width: 68%;
+}
+
+.account-list .account-info .profit {
+  color: #fc4c4c;
+}
+
+.account-list .account-info .loss {
+  color: #327aee;
+}
+
+.account-list .account-info .number {
+  font-weight: bold;
+}
+
+.account-list .account-info .profit .gain {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+}
+
+.account-list .account-info .money {
+  color: #323232;
+  font-weight: bold;
 }
 
 .add-asset {
   margin-top: 16rpx;
   padding: 16rpx 0;
-  color: #409eff;
+  color: #4691ee;
   background-color: #fff;
   text-align: center;
 }
