@@ -1,0 +1,105 @@
+/* components/dialog/dialog.wxss */
+
+.dialog-mask {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  animation-duration: 0.25s; /*动画持续时间*/
+  animation-iteration-count: 1; /*动画次数*/
+  animation-delay: 0s; /*延迟时间*/
+}
+
+.dialog-container {
+  position: absolute;
+  width: 100%;
+  background-color: #fff;
+  animation-duration: 0.25s;
+  animation-iteration-count: 1;
+  animation-delay: 0s;
+}
+
+.dialog-header {
+  padding: 16rpx 32rpx;
+  color: #323232;
+  border-bottom: 1px solid #dcdcdc;
+  background-color: #fff;
+}
+
+.animaton_fadeIn {
+  animation-name: fadeIn; /*动画名称*/
+}
+
+.animaton_fadeOut {
+  animation-name: fadeOut; /*动画名称*/
+}
+
+.animaton_tb {
+  top: 0;
+  animation-name: topToBootom;
+}
+
+.animaton_bt {
+  bottom: 0;
+  animation-name: bottomToTop;
+}
+
+.animaton_lr {
+  left: 0;
+  animation-name: leftToRight;
+}
+
+.animaton_rl {
+  right: 0;
+  animation-name: rightToLeft;
+}
+
+/*从上到下*/
+
+@keyframes topToBootom {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/*从下到上*/
+
+@keyframes bottomToTop {
+  from {
+    transform: translateY(100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/*从左到右*/
+
+@keyframes leftToRight {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/*从右到左*/
+
+@keyframes rightToLeft {
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}

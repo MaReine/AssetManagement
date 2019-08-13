@@ -1,3 +1,5 @@
 {
-  
+  "usingComponents": {
+    "authorization": "../../components/dialog/dialog"
+  }
 }

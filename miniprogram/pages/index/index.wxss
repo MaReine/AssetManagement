@@ -130,3 +130,38 @@
 .add-asset .as {
   font-size: 38rpx;
 }
+
+.authorization {
+  padding-bottom: 38rpx;
+  width: 100%;
+  background-color: #fff;
+}
+
+.authorization .tips {
+  padding: 38rpx 0;
+  text-align: center;
+  color: #07c160;
+}
+
+.authorization .buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.authorization button {
+  display: inline-block;
+  width: 40%;
+  height: 64rpx;
+  line-height: 64rpx;
+  font-size: 32rpx;
+}
+
+.authorization .cancle {
+  color: #323232;
+  background-color: dcdcdc;
+}
+
+.authorization .sure {
+  color: #fff;
+  background-color: #07c160;
+}

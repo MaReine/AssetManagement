@@ -1,6 +1,6 @@
 <view class='header'>
   <view class='avatar'>
-    <button open-type="getUserInfo" bindgetuserinfo="onGetUserInfo" style="background-image: url({{avatarUrl}})"></button>
+    <button style="background-image: url({{userInfo.avatarUrl}})"></button>
   </view>
   <view class='nick'>
     <text>{{userInfo.nickName}}</text>

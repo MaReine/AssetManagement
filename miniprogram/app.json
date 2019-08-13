@@ -30,7 +30,7 @@
         "selectedIconPath": "images/icons/asset_active.png"
       },
       {
-        "pagePath": "pages/home/index",
+        "pagePath": "pages/setup/setup",
         "text": "设置",
         "iconPath": "images/icons/setup.png",
         "selectedIconPath": "images/icons/setup_active.png"

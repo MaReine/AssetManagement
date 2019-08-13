@@ -1,2 +1,35 @@
-<!--miniprogram/pages/addAccount/addAccount.wxml-->
-<text>miniprogram/pages/addAccount/addAccount.wxml</text>
+<view class='form'>
+  <view class='form-item'>
+    <view class='form-label'>账户名称</view>
+    <view class='form-content'>
+      <input bindinput="inputName" placeholder="请输入" auto-focus />
+    </view>
+  </view>
+  <view class='form-item'>
+    <view class='form-label'>账户金额</view>
+    <view class='form-content'>
+      <input bindinput="inputMoney" placeholder="0.00" type="digit" />
+    </view>
+  </view>
+  <view class='form-item'>
+    <view class='form-label'>账户类型</view>
+    <view class='form-content'>
+      <picker bindchange="typeChange" value="{{index}}" range-key="name" range="{{types}}">
+        <view class="picker">{{types[typeIndex].name}}</view>
+      </picker>
+    </view>
+  </view>
+  <view class='form-item'>
+    <view class='form-label'>账户属性</view>
+    <view class='form-content'>
+      <input bindinput="inputAttr" disabled/>
+    </view>
+  </view>
+  <view class='form-item'>
+    <view class='form-label'>账户备注</view>
+    <view class='form-content'>
+      <textarea bindinput="inputRemark" auto-height placeholder="请输入" />
+    </view>
+  </view>
+</view>
+<view class='submit' bindtap='submit'>保存</view>

@@ -1,1 +1,54 @@
-/* miniprogram/pages/addAccount/addAccount.wxss */
+.form {
+  margin-top: 16rpx;
+  width: 100%;
+  background-color: #fff;
+  border-top: 1px solid #dcdfe6;
+}
+
+.form-item {
+  display: flex;
+  padding: 16rpx 0;
+  align-items: center;
+  border-bottom: 1px solid #dcdfe6;
+}
+
+.form-label {
+  padding-left: 32rpx;
+  width: 30%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.form-content {
+  padding-right: 32rpx;
+  width: 70%;
+}
+
+.form-content input {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.form-content .picker {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.form-content textarea {
+  width: 100%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.submit {
+  display: flex;
+  margin: 32rpx auto;
+  width: 96%;
+  height: 80rpx;
+  align-items: center;
+  justify-content: center;
+  background-color: #4691ee;
+  font-size: 32rpx;
+  color: #fff;
+  border-radius: 8rpx;
+}
