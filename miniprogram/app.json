@@ -9,8 +9,8 @@
     "pages/deployFunctions/deployFunctions",
     "pages/chooseLib/chooseLib",
     "pages/openapi/openapi",
-    "pages/setup/setup",
-    "pages/addAccount/addAccount"
+    "pages/addAccount/addAccount",
+    "pages/setup/setup"
   ],
   "window": {
     "backgroundColor": "#F0F0F0",

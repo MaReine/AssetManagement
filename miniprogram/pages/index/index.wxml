@@ -1,46 +1,56 @@
 <view class='total'>
   <view class='label'>资产汇总</view>
-  <view class='money'>100,000.00</view>
+  <view class='money'>{{totalAssets}}</view>
 </view>
 <view class='sub-total'>
   <view class='item'>
     <view class='label'>固定资产</view>
-    <view class='money'>100,000.00</view>
+    <view class='money'>{{fixedAssets}}</view>
   </view>
   <view class='item'>
     <view class='label'>浮动资产</view>
-    <view class='money'>100,000.00</view>
+    <view class='money'>{{floatAssets}}</view>
   </view>
   <view class='item'>
     <view class='label'>负债</view>
-    <view class='money'>100,000.00</view>
+    <view class='money'>{{liabilities}}</view>
   </view>
 </view>
-<view class='account-group'>
-  <view class='group-label'>固定资产(30000)</view>
-  <view class='account-list'>
-    <view class='left'>
-      <view class='account-name'>招商银行信用卡</view>
+<view class='account-group' wx:for="{{lists}}" wx:for-item="item" wx:key="{{item.type}}">
+  <view class='group-label'>{{item.typeName}}({{item.totalMoney}})</view>
+  <view class='account-list' wx:for="{{item.items}}" wx:for-item="list" wx:key="{{list._id}}">
+    <view class='left' wx:if="{{list.attr === 1}}">
+      <view class='account-name'>{{list.name}}</view>
       <view class='account-info'>
         <view class='info-item'>
           <view class='info-label'>总盈亏</view>
-          <view class='profit'>
-            <text class='number'>100000.00</text>
-            <text class='gain'>+100000.00%</text>
+          <view class='profit' wx:if="{{list.profitType === 1}}">
+            <text class='number'>{{list.profit}}</text>
+            <text class='gain'>+{{list.profitPercent}}%</text>
+          </view>
+          <view class='profit loss' wx:else>
+            <text class='number'>{{list.profit}}</text>
+            <text class='gain'>-{{list.profitPercent}}%</text>
           </view>
         </view>
         <view class='info-item'>
           <view class='info-label'>总资产</view>
-          <view class='money'>10000000.00</view>
+          <view class='money'>{{list.money}}</view>
         </view>
       </view>
     </view>
+    <view class='left' wx:else>
+      <view class='account-name'>{{list.name}}</view>
+      <view class='account-info'>
+        <text class='money'>{{list.money}}</text>
+      </view>
+    </view>
     <view class='right'>
-      <text class='date'>2019-08-12</text>
+      <text class='date'>{{list.showDate}}</text>
       <text class="as icon-jinru"></text>
     </view>
   </view>
-  <view class='account-list'>
+  <!-- <view class='account-list'>
     <view class='left'>
       <view class='account-name'>招商银行信用卡</view>
       <view class='account-info'>
@@ -73,7 +83,7 @@
       <text class='date'>2019-08-12</text>
       <text class="as icon-jinru"></text>
     </view>
-  </view>
+  </view> -->
 </view>
 <view class='add-asset' bindtap="addAccount">
   <text class='as icon-zengjia'></text>
