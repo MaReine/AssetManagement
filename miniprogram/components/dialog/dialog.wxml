@@ -1,6 +1,6 @@
 <view class="dialog-mask {{maskAnimaton}}" hidden='{{!dialogShow}}'>
   <view class='dialog-container {{animation}}'>
-    <view class='dialog-header' bindtap='hide'>{{title}}</view>
+    <view class='dialog-header'>{{title}}</view>
     <view class='dialog-content'>
       <slot></slot>
     </view>

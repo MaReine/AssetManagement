@@ -10,6 +10,7 @@
   animation-duration: 0.25s; /*动画持续时间*/
   animation-iteration-count: 1; /*动画次数*/
   animation-delay: 0s; /*延迟时间*/
+  z-index: 999;
 }
 
 .dialog-container {
@@ -19,6 +20,12 @@
   animation-duration: 0.25s;
   animation-iteration-count: 1;
   animation-delay: 0s;
+}
+
+.dialog-container-center {
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -30%);
 }
 
 .dialog-header {

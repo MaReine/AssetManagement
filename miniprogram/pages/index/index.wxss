@@ -116,7 +116,7 @@
 }
 
 .add-asset {
-  margin: 16rpx 0 32rpx 0;
+  margin: 32rpx 0;
   padding: 16rpx 0;
   color: #4691ee;
   background-color: #fff;

@@ -1,0 +1,252 @@
+.total {
+  padding-bottom: 16rpx;
+  background-color: #fc4c4c;
+  color: #fff;
+  text-align: center;
+}
+
+.total .money {
+  font-size: 48rpx;
+  font-weight: bold;
+}
+
+.sub-total {
+  display: flex;
+  background-color: #fff;
+  color: #fff;
+}
+
+.sub-total .item {
+  width: 40%;
+  padding: 16rpx 0 16rpx 32rpx;
+}
+
+.sub-total .item:first-child {
+  width: 60%;
+}
+
+.sub-total .item .profit {
+  color: #fc4c4c;
+}
+
+.sub-total .item .loss {
+  color: #327aee;
+}
+
+.sub-total .item .profit .gain {
+  margin-left: 16rpx;
+  font-size: 24rpx;
+}
+
+.sub-total .item .label {
+  font-size: 24rpx;
+  color: #8e8e8e;
+}
+
+.sub-total .item .label .as {
+  margin-left: 8rpx;
+  font-size: 28rpx;
+}
+
+.sub-total .item .money {
+  font-size: 28rpx;
+  color: #323232;
+  font-weight: bold;
+}
+
+.account-remark {
+  padding: 16rpx 32rpx;
+  background-color: #fff;
+  border-top: 1px solid #dcdcdc;
+  font-size: 24rpx;
+  color: #323232;
+}
+
+.container {
+  margin-top: 16rpx;
+  padding: 32rpx;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.container .timeline-item {
+  position: relative;
+  display: flex;
+}
+
+.container .timeline-item::before {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  left: 37rpx;
+  top: -32rpx;
+  bottom: -32px;
+  border-left: 1px solid #dcdcdc;
+}
+
+.container .timeline-item .left {
+  position: relative;
+  margin-right: 32rpx;
+  width: 76rpx;
+  height: 76rpx;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 24rpx;
+  text-align: center;
+  line-height: 76rpx;
+  z-index: 1;
+}
+
+.container .timeline-item .buy {
+  background-color: #fc4c4c;
+}
+
+.container .timeline-item .sale {
+  background-color: #327aee;
+}
+
+.container .timeline-item .right {
+  flex: 1;
+}
+
+.container .timeline-item .right .date {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #8e8e8e;
+  line-height: 76rpx;
+}
+
+.container .timeline-item .right .date .as {
+  margin-left: auto;
+  font-size: 28rpx;
+}
+
+.container .timeline-item .right .date::before {
+  content: "";
+  display: inline-block;
+  margin-left: -32rpx;
+  width: 32rpx;
+  border-top: 1px solid #dcdcdc;
+}
+
+.container .timeline-item .right .info {
+  padding: 16rpx 32rpx 0;
+  box-shadow: 0 4rpx 24rpx 0 rgba(0, 0, 0, 0.1);
+  border-radius: 8rpx;
+  border: 1px solid #ebeef5;
+  background-color: #fff;
+  overflow: hidden;
+  color: #fff;
+  transition: 0.3s;
+  font-size: 28rpx;
+}
+
+.container .timeline-item .right .buy {
+  background-color: #fc4c4c;
+  border: 1px solid #fc4c4c;
+}
+
+.container .timeline-item .right .sale {
+  background-color: #327aee;
+  border: 1px solid #327aee;
+}
+
+.container .timeline-item .right .info-item {
+  display: flex;
+  margin-bottom: 16rpx;
+}
+
+.container .timeline-item .right .info-item .label {
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+
+.container .timeline-item .right .info-item .text {
+  vertical-align: middle;
+}
+
+.operate {
+  margin: 32rpx 0;
+  padding: 16rpx 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #fff;
+}
+
+.operate button {
+  width: 40%;
+  height: 68rpx;
+  line-height: 68rpx;
+  font-size: 32rpx;
+  color: #fff;
+}
+
+.operate .buy {
+  background-color: #fc4c4c;
+}
+
+.operate .sale {
+  background-color: #327aee;
+}
+
+.addRecord .form-item {
+  display: flex;
+  padding: 16rpx 0;
+  align-items: center;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.addRecord .form-item:last-child {
+  border-bottom: none;
+}
+
+.addRecord .form-label {
+  padding-left: 32rpx;
+  width: 30%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content {
+  padding-right: 32rpx;
+  width: 70%;
+}
+
+.addRecord .form-content input {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content .picker {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content textarea {
+  width: 100%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .save {
+  display: flex;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 32rpx;
+}
+
+.addRecord .save text {
+  width: 50%;
+}
+
+.addRecord .save text:first-child {
+  color: #323232;
+  border-right: 1px solid #dcdcdc;
+}
+
+.addRecord .save text:last-child {
+  color: #4691ee;
+}

@@ -10,7 +10,8 @@
     "pages/chooseLib/chooseLib",
     "pages/openapi/openapi",
     "pages/addAccount/addAccount",
-    "pages/setup/setup"
+    "pages/setup/setup",
+    "pages/accountDetails/accountDetails"
   ],
   "window": {
     "backgroundColor": "#F0F0F0",

@@ -1,0 +1,58 @@
+<view class='total'>
+  <view class='label'>余额</view>
+  <view class='money'>{{lastMoney}}</view>
+</view>
+<view class='sub-total' wx:if="{{accountInfo.attr === 1}}">
+  <view class='item'>
+    <view class='label'>盈亏</view>
+    <view class='profit'>
+      <text class='number'>{{accountInfo.profit}}</text>
+      <text class='gain'>+{{accountInfo.profitPercent}}%</text>
+    </view>
+  </view>
+  <view class='item'>
+    <view class='label'>本金
+      <text class='as icon-bianji'></text>
+    </view>
+    <view class='money'>{{accountInfo.money}}</view>
+  </view>
+</view>
+<view class='account-remark' wx:if="{{accountInfo.remark}}">备注：{{accountInfo.remark}}</view>
+<view class='container'>
+  <view class="timeline-item">
+    <view class="left buy">{{inLabel}}</view>
+    <view class="right">
+      <view class="date">2018-08-15 13:14:00
+        <text class='as icon-shanchu'></text>
+      </view>
+      <view class="info buy">
+        <view class="info-item">
+          <text class="label">金额：</text>
+          <view class="text">0.00</view>
+        </view>
+        <view class="info-item">
+          <text class="label">备注：</text>
+          <view class="text">无</view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view class='operate'>
+  <button class='buy' bindtap='handleBuy'>{{inLabel}}</button>
+  <button class='sale' bindtap='handleSale'>{{outLabel}}</button>
+</view>
+<dialog visible="{{dialogShow}}" animation="animaton_bt" title="添加记录">
+  <view class='addRecord'>
+    <view class='form-item'>
+      <view class='form-label'>账户名称</view>
+      <view class='form-content'>
+        <input bindinput="inputName" value='{{name}}' placeholder="请输入" auto-focus />
+      </view>
+    </view>
+    <view class='save'>
+      <text bindtap='cancle'>取消</text>
+      <text bindtap='save'>保存</text>
+    </view>
+  </view>
+</dialog>

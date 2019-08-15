@@ -12,7 +12,8 @@ Page({
     fixedAssets: "0.00", // 固定资产
     floatAssets: "0.00", // 浮动资产
     liabilities: "0.00", // 负债
-    lists: [] // 账户列表
+    lists: [], // 账户列表
+    jumpUrl: "" // 授权后要跳转的界面
   },
   /**
    * 跳转新增账户页面
@@ -21,11 +22,32 @@ Page({
     if (!app.globalData.userInfo) {
       console.log('未登录授权');
       this.setData({
-        isLogin: true
+        isLogin: true,
+        jumpUrl: "../addAccount/addAccount"
       });
     } else {
       wx.navigateTo({
         url: '../addAccount/addAccount'
+      })
+    }
+  },
+  openDetail: function(e) {
+    const info = e.currentTarget.dataset.item;
+    if (info) {
+      if (!app.globalData.userInfo) {
+        console.log('未登录授权');
+        this.setData({
+          isLogin: true,
+          jumpUrl: "../accountDetails/accountDetails"
+        });
+      } else {
+        wx.navigateTo({
+          url: '../accountDetails/accountDetails'
+        })
+      }
+      wx.setStorage({
+        key: 'AccountInfo',
+        data: info,
       })
     }
   },
@@ -52,7 +74,7 @@ Page({
           isLogin: false
         });
         wx.navigateTo({
-          url: '../addAccount/addAccount'
+          url: this.data.jumpUrl
         })
       }, 1000);
     } else {

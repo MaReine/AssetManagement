@@ -15,7 +15,7 @@ Component({
     },
     animation: {
       type: String,
-      value: "animaton_fadeIn"
+      value: "dialog-container-center"
     },
     title: {
       type: String,
