@@ -1,5 +1,10 @@
 <view class='total'>
-  <view class='label'>余额</view>
+  <view class='label' wx:if="{{accountInfo.attr === 2}}">欠款
+    <text class='as icon-bianji'></text>
+  </view>
+  <view class='label' wx:else>余额
+    <text class='as icon-bianji'></text>
+  </view>
   <view class='money'>{{lastMoney}}</view>
 </view>
 <view class='sub-total' wx:if="{{accountInfo.attr === 1}}">
@@ -18,21 +23,38 @@
   </view>
 </view>
 <view class='account-remark' wx:if="{{accountInfo.remark}}">备注：{{accountInfo.remark}}</view>
-<view class='container'>
-  <view class="timeline-item">
-    <view class="left buy">{{inLabel}}</view>
+<view class='container' wx:if="{{lists.length !== 0}}">
+  <view class="timeline-item" wx:for="{{lists}}" wx:for-item="item" wx:key="{{item._id}}">
+    <view class="left buy" wx:if="{{item.operateType === 1}}">{{inLabel}}</view>
+    <view class="left sale" wx:else>{{outLabel}}</view>
     <view class="right">
-      <view class="date">2018-08-15 13:14:00
-        <text class='as icon-shanchu'></text>
+      <view class="date">{{item.updateDate}}
+        <text bindtap="deleteRecord" data-item="{{item}}" class='as icon-shanchu'></text>
       </view>
-      <view class="info buy">
+      <view class="info buy" wx:if="{{item.operateType === 1}}">
         <view class="info-item">
-          <text class="label">金额：</text>
-          <view class="text">0.00</view>
+          <text class="label">操作：</text>
+          <view class="text">从
+            <text class="tip">{{item.selectAccountInfo.name}}</text> {{inLabel}}
+            <text class="tip">{{item.money}}</text>
+          </view>
         </view>
-        <view class="info-item">
+        <view class="info-item" wx:if="{{item.remark}}">
           <text class="label">备注：</text>
-          <view class="text">无</view>
+          <view class="text">{{item.remark}}</view>
+        </view>
+      </view>
+      <view class="info sale" wx:else>
+        <view class="info-item">
+          <text class="label">操作：</text>
+          <view class="text">{{outLabel}}
+            <text class="tip">{{item.money}}</text> 到
+            <text class="tip">{{item.selectAccountInfo.name}}</text>
+          </view>
+        </view>
+        <view class="info-item" wx:if="{{item.remark}}">
+          <text class="label">备注：</text>
+          <view class="text">{{item.remark}}</view>
         </view>
       </view>
     </view>
@@ -42,17 +64,51 @@
   <button class='buy' bindtap='handleBuy'>{{inLabel}}</button>
   <button class='sale' bindtap='handleSale'>{{outLabel}}</button>
 </view>
-<dialog visible="{{dialogShow}}" animation="animaton_bt" title="添加记录">
+<dialog visible="{{dialogShow}}" animation="animaton_bt" title="添加{{currentOpTypeName}}记录">
   <view class='addRecord'>
     <view class='form-item'>
-      <view class='form-label'>账户名称</view>
+      <view class='form-label'>从</view>
+      <view class='form-content' wx:if="{{currentOpType === 1}}">
+        <picker bindchange="accountChange" value="{{index}}" range-key="name" range="{{accountLists}}">
+          <view class="picker">
+            <text>{{accountLists[selectAccountIndex].name}}</text>
+            <text wx:if="{{accountLists[selectAccountIndex].attr !== -1}}" class="tips">({{accountLists[selectAccountIndex].updateMoney}})</text>
+          </view>
+        </picker>
+      </view>
+      <view class='form-content' wx:else>
+        <input value='{{accountInfo.name}}' disabled/>
+      </view>
+    </view>
+    <view class='form-item'>
+      <view class='form-label'>{{currentOpTypeName}}到</view>
+      <view class='form-content' wx:if="{{currentOpType === 1}}">
+        <input value='{{accountInfo.name}}' disabled/>
+      </view>
+      <view class='form-content' wx:else>
+        <picker bindchange="accountChange" value="{{index}}" range-key="name" range="{{accountLists}}">
+          <view class="picker">
+            <text>{{accountLists[selectAccountIndex].name}}</text>
+            <text wx:if="{{accountLists[selectAccountIndex].attr !== -1}}" class="tips">({{accountLists[selectAccountIndex].updateMoney}})</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+    <view class='form-item'>
+      <view class='form-label'>{{currentOpTypeName}}金额</view>
       <view class='form-content'>
-        <input bindinput="inputName" value='{{name}}' placeholder="请输入" auto-focus />
+        <input bindinput="inputRecordMoney" value='{{recordMoney}}' placeholder="0.00" type="digit" />
+      </view>
+    </view>
+    <view class='form-item'>
+      <view class='form-label'>备注</view>
+      <view class='form-content'>
+        <textarea bindinput="inputRecordRemark" value='{{recordRemark}}' auto-height placeholder="选填" />
       </view>
     </view>
     <view class='save'>
       <text bindtap='cancle'>取消</text>
-      <text bindtap='save'>保存</text>
+      <text bindtap='save'>确定</text>
     </view>
   </view>
 </dialog>

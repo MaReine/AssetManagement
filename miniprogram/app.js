@@ -147,5 +147,55 @@ App({
         return $1 + ",";
       });
     });
+  },
+  /**
+   * 通用的获取单条数据的方法
+   */
+  GetSingleData: function(name, id) {
+    return new Promise((resolve, reject) => {
+      const db = wx.cloud.database()
+      db.collection(name).doc(id).get({
+        success: function(res) {
+          resolve(res);
+        },
+        fail: function(err) {
+          reject(err);
+        }
+      })
+    });
+  },
+  /**
+   * 通用的更新单条数据的方法
+   */
+  UpdateSingleData: function(name, id, params) {
+    return new Promise((resolve, reject) => {
+      const db = wx.cloud.database()
+      db.collection(name).doc(id).update({
+        // data 传入需要局部更新的数据
+        data: params,
+        success: function(res) {
+          resolve(res);
+        },
+        fail: function(err) {
+          reject(err);
+        }
+      })
+    });
+  },
+  /**
+   * 通用的删除单条数据的方法
+   */
+  DeleteSingleData: function(name, id) {
+    return new Promise((resolve, reject) => {
+      const db = wx.cloud.database()
+      db.collection(name).doc(id).remove({
+        success: function(res) {
+          resolve(res);
+        },
+        fail: function(err) {
+          reject(err);
+        }
+      })
+    });
   }
 })

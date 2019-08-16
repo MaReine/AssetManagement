@@ -97,7 +97,7 @@ Page({
       _openid: id
     }).orderBy('updateDate', 'desc').get({
       success: res => {
-        console.log('[数据库] [查询账户列表] 成功: ', res)
+        console.log('[首页] [查询账户列表] 成功: ', res)
         if (res.data.length !== 0) {
           let resList = [],
             totalList = [],
@@ -112,15 +112,15 @@ Page({
             item.showDate = item.updateDate.split(" ")[0];
             switch (item.attr) {
               case 0: // 固定资产
-                fixedAssets += item.money * 10000;
+                fixedAssets += item.updateMoney * 10000;
                 fixedList.push(item);
                 break;
               case 1: // 浮动资产
-                floatAssets += item.money * 10000;
+                floatAssets += item.updateMoney * 10000;
                 floatList.push(item);
                 break;
               case 2: // 负债
-                liabilities += item.money * 10000;
+                liabilities += item.updateMoney * 10000;
                 liabiList.push(item);
                 break;
             }
@@ -134,7 +134,7 @@ Page({
               let obj = {
                 type: item.type,
                 typeName: item.typeName,
-                totalMoney: item.money,
+                totalMoney: item.updateMoney,
                 items: [item]
               };
               resList.push(obj);
@@ -143,7 +143,7 @@ Page({
               resList.map((list) => {
                 if (list.type === item.type) {
                   list.items.push(item);
-                  list.totalMoney = (list.totalMoney * 10000 + item.money * 10000) / 10000;
+                  list.totalMoney = (list.totalMoney * 10000 + item.updateMoney * 10000) / 10000;
                   isExt = true;
                 }
               });
@@ -151,7 +151,7 @@ Page({
                 let obj = {
                   type: item.type,
                   typeName: item.typeName,
-                  totalMoney: item.money,
+                  totalMoney: item.updateMoney,
                   items: [item]
                 };
                 resList.push(obj);
@@ -165,11 +165,11 @@ Page({
             liabilities: app.get_thousand_num(liabilities / 10000),
             lists: resList
           });
-          console.log('[账户列表] : ', resList)
+          console.log('[首页] [账户列表] : ', resList)
         }
       },
       fail: err => {
-        console.error('[数据库] [查询账户列表] 失败：', err)
+        console.error('[首页] [查询账户列表] 失败：', err)
       },
       complete: res => {
         wx.hideLoading();

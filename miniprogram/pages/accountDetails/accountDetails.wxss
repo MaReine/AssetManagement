@@ -64,6 +64,7 @@
 
 .container {
   margin-top: 16rpx;
+  margin-bottom: 114rpx;
   padding: 32rpx;
   background-color: #fff;
   overflow: hidden;
@@ -90,19 +91,21 @@
   width: 76rpx;
   height: 76rpx;
   border-radius: 50%;
-  color: #fff;
   font-size: 24rpx;
   text-align: center;
   line-height: 76rpx;
   z-index: 1;
+  background-color: #fff;
 }
 
 .container .timeline-item .buy {
-  background-color: #fc4c4c;
+  color: #fc4c4c;
+  border: 1px solid #fc4c4c;
 }
 
 .container .timeline-item .sale {
-  background-color: #327aee;
+  color: #327aee;
+  border: 1px solid #327aee;
 }
 
 .container .timeline-item .right {
@@ -137,19 +140,9 @@
   border: 1px solid #ebeef5;
   background-color: #fff;
   overflow: hidden;
-  color: #fff;
+  color: #323232;
   transition: 0.3s;
   font-size: 28rpx;
-}
-
-.container .timeline-item .right .buy {
-  background-color: #fc4c4c;
-  border: 1px solid #fc4c4c;
-}
-
-.container .timeline-item .right .sale {
-  background-color: #327aee;
-  border: 1px solid #327aee;
 }
 
 .container .timeline-item .right .info-item {
@@ -166,13 +159,26 @@
   vertical-align: middle;
 }
 
+.container .timeline-item .right .buy .tip {
+  color: #fc4c4c;
+}
+
+.container .timeline-item .right .sale .tip {
+  color: #327aee;
+}
+
 .operate {
-  margin: 32rpx 0;
+  position: fixed;
+  left: 0;
+  bottom: 0;
   padding: 16rpx 0;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: #fff;
+  z-index: 2;
+  box-shadow: 0px -2px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
 .operate button {
@@ -180,15 +186,17 @@
   height: 68rpx;
   line-height: 68rpx;
   font-size: 32rpx;
-  color: #fff;
+  background-color: #fff;
 }
 
 .operate .buy {
-  background-color: #fc4c4c;
+  color: #fc4c4c;
+  border: 1px solid #fc4c4c;
 }
 
 .operate .sale {
-  background-color: #327aee;
+  color: #327aee;
+  border: 1px solid #327aee;
 }
 
 .addRecord .form-item {
@@ -224,6 +232,11 @@
   color: #323232;
 }
 
+.addRecord .form-content .picker .tips {
+  font-size: 24rpx;
+  color: #8e8e8e;
+}
+
 .addRecord .form-content textarea {
   width: 100%;
   font-size: 32rpx;
@@ -243,7 +256,7 @@
 }
 
 .addRecord .save text:first-child {
-  color: #323232;
+  color: #8e8e8e;
   border-right: 1px solid #dcdcdc;
 }
 

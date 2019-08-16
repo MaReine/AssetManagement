@@ -2,7 +2,7 @@
   <view class='form-item'>
     <view class='form-label'>账户名称</view>
     <view class='form-content'>
-      <input bindinput="inputName" value='{{name}}' placeholder="请输入" auto-focus />
+      <input bindinput="inputName" value='{{name}}' placeholder="必填" auto-focus />
     </view>
   </view>
   <view class='form-item'>
@@ -28,7 +28,7 @@
   <view class='form-item'>
     <view class='form-label'>账户备注</view>
     <view class='form-content'>
-      <textarea bindinput="inputRemark" value='{{remark}}' auto-height placeholder="请输入" />
+      <textarea bindinput="inputRemark" value='{{remark}}' auto-height placeholder="选填" />
     </view>
   </view>
 </view>
