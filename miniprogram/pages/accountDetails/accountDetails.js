@@ -71,6 +71,17 @@ Page({
   },
 
   /**
+   * 重置表单数据
+   */
+  resetParams: function() {
+    this.setData({
+      recordMoney: "", // 记录金额
+      recordRemark: "", // 记录备注
+      selectAccountIndex: 0 // 选择的账户下标
+    });
+  },
+
+  /**
    * 表单验证
    */
   validate: function() {
@@ -126,10 +137,9 @@ Page({
             duration: 1000
           })
           setTimeout(() => {
-            this.setData({
-              dialogShow: false
-            })
-            this.updateCurrentAccount();
+            this.cancle();
+            this.resetParams();
+            this.updateAccount(params.currentAccountInfo, params.operateType, params.money);
             this.updateSelectAccount();
           }, 1000);
         },
@@ -161,11 +171,7 @@ Page({
         if (res.confirm) {
           app.DeleteSingleData("account_details", info._id).then(res => {
             console.log("[账户详情] [删除记录] 成功", res);
-            this.getSingleAccountInfo();
-            wx.setStorage({
-              key: "IndexUpdate",
-              data: true
-            })
+            that.getSingleAccountInfo();
           }).catch(err => {
             console.log("[账户详情] [删除记录] 失败", err);
           });
@@ -175,26 +181,29 @@ Page({
   },
 
   /**
-   * 更新当前账户数据
+   * 更新账户数据
+   * params a[账户信息]
+   * params o[操作类型]
+   * parmas m[金额]
    */
-  updateCurrentAccount: function() {
-    let money = this.data.accountInfo.money;
-    let updateMoney = this.data.accountInfo.updateMoney;
-    if (this.data.accountInfo.attr === 2) {
-      if (this.data.currentOpType === 1) {
-        money = money - Number(this.data.recordMoney);
-        updateMoney = updateMoney - Number(this.data.recordMoney);
+  updateAccount: function(a, o, m) {
+    let money = a.money;
+    let updateMoney = a.updateMoney;
+    if (a.attr === 2) {
+      if (o === 1) {
+        money = (money * 10000 - Number(m) * 10000) / 10000;
+        updateMoney = (updateMoney * 10000 - Number(m) * 10000) / 10000;
       } else {
-        money = money + Number(this.data.recordMoney);
-        updateMoney = updateMoney + Number(this.data.recordMoney);
+        money = (money * 10000 + Number(m) * 10000) / 10000;
+        updateMoney = (updateMoney * 10000 + Number(m) * 10000) / 10000;
       }
     } else {
-      if (this.data.currentOpType === 1) {
-        money = money + Number(this.data.recordMoney);
-        updateMoney = updateMoney + Number(this.data.recordMoney);
+      if (o === 1) {
+        money = (money * 10000 + Number(m) * 10000) / 10000;
+        updateMoney = (updateMoney * 10000 + Number(m) * 10000) / 10000;
       } else {
-        money = money - Number(this.data.recordMoney);
-        updateMoney = updateMoney - Number(this.data.recordMoney);
+        money = (money * 10000 - Number(m) * 10000) / 10000;
+        updateMoney = (updateMoney * 10000 - Number(m) * 10000) / 10000;
       }
     }
     // 当前账户需要更新的参数
@@ -203,15 +212,16 @@ Page({
       updateMoney: updateMoney,
       updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
     }
-    app.UpdateSingleData("accounts", this.data.accountInfo._id, params).then(res => {
-      console.log("[账户详情] [更新当前账户信息] 成功", res);
+    console.log("[账户详情] [更新账户参数]", params);
+    app.UpdateSingleData("accounts", a._id, params).then(res => {
+      console.log("[账户详情] [更新账户信息] 成功", res);
       this.getSingleAccountInfo();
       wx.setStorage({
         key: "IndexUpdate",
         data: true
       })
     }).catch(err => {
-      console.log("[账户详情] [更新当前账户信息] 失败", err);
+      console.log("[账户详情] [更新账户信息] 失败", err);
     });
   },
 

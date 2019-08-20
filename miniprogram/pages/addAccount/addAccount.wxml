@@ -12,6 +12,12 @@
     </view>
   </view>
   <view class='form-item'>
+    <view class='form-label'>金额汇率</view>
+    <view class='form-content'>
+      <input bindinput="inputRate" value='{{rate}}' placeholder="1.00" type="digit" />
+    </view>
+  </view>
+  <view class='form-item'>
     <view class='form-label'>账户类型</view>
     <view class='form-content'>
       <picker bindchange="typeChange" value="{{index}}" range-key="label" range="{{types}}">

@@ -9,6 +9,7 @@ Page({
   data: {
     name: "", // 账户名
     money: "", // 账户金额
+    rate: "", // 金额汇率
     types: [], // 账户类型
     typeIndex: 0, // 默认第一个类型
     attr: "固定资产", // 账户属性
@@ -24,6 +25,12 @@ Page({
   inputMoney: function(e) {
     this.setData({
       money: e.detail.value
+    });
+  },
+
+  inputRate: function(e) {
+    this.setData({
+      rate: e.detail.value
     });
   },
 
@@ -65,7 +72,16 @@ Page({
 
     if (isNaN(Number(this.data.money))) {
       wx.showToast({
-        title: "请输入正确金额",
+        title: "金额只能为数字!",
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+
+    if (this.data.rate && isNaN(Number(this.data.rate))) {
+      wx.showToast({
+        title: "汇率只能为数字!",
         icon: 'none',
         duration: 2000
       })
@@ -84,6 +100,7 @@ Page({
         name: this.data.name, // 账户名称
         money: Number(this.data.money), // 账户金额
         updateMoney: Number(this.data.money), // 账户最新的金额
+        rate: this.data.rate !== "" ? Number(this.data.rate) : 1.00,
         profit: 0, // 账户收益
         profitPercent: "0.00", // 收益百分比 
         profitType: 1, // 收益类型 1 盈利 2 亏损 
