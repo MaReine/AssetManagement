@@ -109,32 +109,36 @@ Page({
             floatAssets = 0,
             liabilities = 0;
           res.data.map(item => {
+            // 先转化成人民币
+            const rmb = app.Calc(app.Calc(item.updateMoney, item.rate, "*"), 2);
             item.showDate = item.updateDate.split(" ")[0];
             switch (item.attr) {
               case 0: // 固定资产
-                fixedAssets += item.updateMoney * 10000;
+                fixedAssets = app.Calc(fixedAssets, rmb, "+");
                 fixedList.push(item);
                 break;
               case 1: // 浮动资产
-                floatAssets += item.updateMoney * 10000;
+                floatAssets = app.Calc(floatAssets, rmb, "+");
                 floatList.push(item);
                 break;
               case 2: // 负债
-                liabilities += item.updateMoney * 10000;
+                liabilities = app.Calc(liabilities, rmb, "+");
                 liabiList.push(item);
                 break;
             }
           });
 
           totalList = floatList.concat(fixedList).concat(liabiList);
-          totalAssets = fixedAssets + floatAssets - liabilities;
+          totalAssets = app.Calc(app.Calc(fixedAssets, floatAssets, "+"), liabilities, "-");
 
           totalList.map(item => {
+            // 先转化成人民币
+            const rmb = app.Calc(app.Calc(item.updateMoney, item.rate, "*"), 2);
             if (resList.length === 0) {
               let obj = {
                 type: item.type,
                 typeName: item.typeName,
-                totalMoney: item.updateMoney,
+                totalMoney: rmb,
                 items: [item]
               };
               resList.push(obj);
@@ -143,7 +147,7 @@ Page({
               resList.map((list) => {
                 if (list.type === item.type) {
                   list.items.push(item);
-                  list.totalMoney = (list.totalMoney * 10000 + item.updateMoney * 10000) / 10000;
+                  list.totalMoney = app.Calc(list.totalMoney, rmb, "+");
                   isExt = true;
                 }
               });
@@ -151,7 +155,7 @@ Page({
                 let obj = {
                   type: item.type,
                   typeName: item.typeName,
-                  totalMoney: item.updateMoney,
+                  totalMoney: rmb,
                   items: [item]
                 };
                 resList.push(obj);
@@ -159,10 +163,10 @@ Page({
             }
           });
           this.setData({
-            totalAssets: app.get_thousand_num(totalAssets / 10000),
-            fixedAssets: app.get_thousand_num(fixedAssets / 10000),
-            floatAssets: app.get_thousand_num(floatAssets / 10000),
-            liabilities: app.get_thousand_num(liabilities / 10000),
+            totalAssets: app.get_thousand_num(totalAssets),
+            fixedAssets: app.get_thousand_num(fixedAssets),
+            floatAssets: app.get_thousand_num(floatAssets),
+            liabilities: app.get_thousand_num(liabilities),
             lists: resList
           });
           console.log('[首页] [账户列表] : ', resList)

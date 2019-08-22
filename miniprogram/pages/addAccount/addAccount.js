@@ -10,6 +10,7 @@ Page({
     name: "", // 账户名
     money: "", // 账户金额
     rate: "", // 金额汇率
+    symbol: "", // 金额符号
     types: [], // 账户类型
     typeIndex: 0, // 默认第一个类型
     attr: "固定资产", // 账户属性
@@ -31,6 +32,12 @@ Page({
   inputRate: function(e) {
     this.setData({
       rate: e.detail.value
+    });
+  },
+
+  inputSymbol: function(e) {
+    this.setData({
+      symbol: e.detail.value
     });
   },
 
@@ -101,6 +108,7 @@ Page({
         money: Number(this.data.money), // 账户金额
         updateMoney: Number(this.data.money), // 账户最新的金额
         rate: this.data.rate !== "" ? Number(this.data.rate) : 1.00,
+        symbol: this.data.symbol || "￥",
         profit: 0, // 账户收益
         profitPercent: "0.00", // 收益百分比 
         profitType: 1, // 收益类型 1 盈利 2 亏损 

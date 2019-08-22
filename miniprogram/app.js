@@ -1,4 +1,5 @@
 //app.js
+import calc from "./utils/calculation/calculation.js"
 App({
   /**
    * 全局参数
@@ -197,5 +198,6 @@ App({
         }
       })
     });
-  }
+  },
+  Calc: calc
 })

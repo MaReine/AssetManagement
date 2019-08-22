@@ -5,19 +5,19 @@
   <view class='label' wx:else>余额
     <text class='as icon-bianji' wx:if="{{accountInfo.attr === 1}}"></text>
   </view>
-  <view class='money'>{{lastMoney}}</view>
+  <view class='money'>{{lastMoney}}{{accountInfo.symbol}}</view>
 </view>
 <view class='sub-total' wx:if="{{accountInfo.attr === 1}}">
   <view class='item'>
     <view class='label'>盈亏</view>
     <view class='profit'>
-      <text class='number'>{{accountInfo.profit}}</text>
+      <text class='number'>{{accountInfo.profit}}{{accountInfo.symbol}}</text>
       <text class='gain'>+{{accountInfo.profitPercent}}%</text>
     </view>
   </view>
   <view class='item'>
     <view class='label'>本金</view>
-    <view class='money'>{{accountInfo.money}}</view>
+    <view class='money'>{{accountInfo.money}}{{accountInfo.symbol}}</view>
   </view>
 </view>
 <view class='account-remark' wx:if="{{accountInfo.remark}}">备注：{{accountInfo.remark}}</view>

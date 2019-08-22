@@ -18,6 +18,12 @@
     </view>
   </view>
   <view class='form-item'>
+    <view class='form-label'>账户符号</view>
+    <view class='form-content'>
+      <input bindinput="inputSymbol" value='{{symbol}}' placeholder="￥" />
+    </view>
+  </view>
+  <view class='form-item'>
     <view class='form-label'>账户类型</view>
     <view class='form-content'>
       <picker bindchange="typeChange" value="{{index}}" range-key="label" range="{{types}}">

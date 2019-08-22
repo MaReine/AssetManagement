@@ -1,23 +1,23 @@
 <view class='total'>
   <view class='label'>资产汇总</view>
-  <view class='money'>{{totalAssets}}</view>
+  <view class='money'>{{totalAssets}}￥</view>
 </view>
 <view class='sub-total'>
   <view class='item'>
     <view class='label'>固定资产</view>
-    <view class='money'>{{fixedAssets}}</view>
+    <view class='money'>{{fixedAssets}}￥</view>
   </view>
   <view class='item'>
     <view class='label'>浮动资产</view>
-    <view class='money'>{{floatAssets}}</view>
+    <view class='money'>{{floatAssets}}￥</view>
   </view>
   <view class='item'>
     <view class='label'>负债</view>
-    <view class='money'>{{liabilities}}</view>
+    <view class='money'>{{liabilities}}￥</view>
   </view>
 </view>
 <view class='account-group' wx:for="{{lists}}" wx:for-item="item" wx:key="{{item.type}}">
-  <view class='group-label'>{{item.typeName}}({{item.totalMoney}})</view>
+  <view class='group-label'>{{item.typeName}}({{item.totalMoney}}￥)</view>
   <view class='account-list' wx:for="{{item.items}}" wx:for-item="list" wx:key="{{list._id}}">
     <view class='left' wx:if="{{list.attr === 1}}">
       <view class='account-name'>{{list.name}}</view>
@@ -25,24 +25,24 @@
         <view class='info-item'>
           <view class='info-label'>总盈亏</view>
           <view class='profit' wx:if="{{list.profitType === 1}}">
-            <text class='number'>{{list.profit}}</text>
+            <text class='number'>{{list.profit}}{{list.symbol}}</text>
             <text class='gain'>+{{list.profitPercent}}%</text>
           </view>
           <view class='profit loss' wx:else>
-            <text class='number'>{{list.profit}}</text>
+            <text class='number'>{{list.profit}}{{list.symbol}}</text>
             <text class='gain'>-{{list.profitPercent}}%</text>
           </view>
         </view>
         <view class='info-item'>
           <view class='info-label'>总资产</view>
-          <view class='money'>{{list.money}}</view>
+          <view class='money'>{{list.money}}{{list.symbol}}</view>
         </view>
       </view>
     </view>
     <view class='left' wx:else>
       <view class='account-name'>{{list.name}}</view>
       <view class='account-info'>
-        <text class='money'>{{list.money}}</text>
+        <text class='money'>{{list.money}}{{list.symbol}}</text>
       </view>
     </view>
     <view class='right' bindtap='openDetail' data-item="{{list}}">
