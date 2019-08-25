@@ -11,8 +11,4 @@
     <view class='info-label'>系统信息</view>
     <view class='info-content'>{{sysInfo}}</view>
   </view>
-  <view class='info-item'>
-    <view class='info-label'>系统信息</view>
-    <view class='info-content'>{{sysInfo}}</view>
-  </view>
 </view>

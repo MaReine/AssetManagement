@@ -18,7 +18,7 @@
 </view>
 <view class='account-group' wx:for="{{lists}}" wx:for-item="item" wx:key="{{item.type}}">
   <view class='group-label'>{{item.typeName}}({{item.totalMoney}}￥)</view>
-  <view class='account-list' wx:for="{{item.items}}" wx:for-item="list" wx:key="{{list._id}}">
+  <view class='account-list {{(currentAccount.index === index && currentAccount.type === item.type) ? "account-list_active" : ""}}' wx:for="{{item.items}}" wx:for-item="list" wx:key="{{list._id}}" catchlongtap="operate" data-index='{"index":{{index}},"type":{{item.type}}}'>
     <view class='left' wx:if="{{list.attr === 1}}">
       <view class='account-name'>{{list.name}}</view>
       <view class='account-info'>
@@ -30,7 +30,7 @@
           </view>
           <view class='profit loss' wx:else>
             <text class='number'>{{list.profit}}{{list.symbol}}</text>
-            <text class='gain'>-{{list.profitPercent}}%</text>
+            <text class='gain'>{{list.profitPercent}}%</text>
           </view>
         </view>
         <view class='info-item'>
@@ -45,17 +45,21 @@
         <text class='money'>{{list.money}}{{list.symbol}}</text>
       </view>
     </view>
-    <view class='right' bindtap='openDetail' data-item="{{list}}">
+    <view class='right' catchtap='openDetail' data-item="{{list}}">
       <text class='date'>{{list.showDate}}</text>
       <text class="as icon-jinru"></text>
     </view>
+    <view class="operate">
+      <view class="btn seting" catchtap="setAccount">设置</view>
+      <view class="btn delete" catchtap="deleteAccount">删除</view>
+    </view>
   </view>
 </view>
-<view class='add-asset' bindtap="addAccount">
+<view class='footer-tips'>我是有底线地~</view>
+<view class="add-float" bindtap="addAccount">
   <text class='as icon-zengjia'></text>
-  <text>添加资产</text>
 </view>
-<authorization visible="{{isLogin}}" animation="animaton_bt" title="资金管理 申请">
+<dialog visible="{{isLogin}}" animation="animaton_bt" title="资金管理 申请">
   <view class='authorization'>
     <view class='tips'>获取你的昵称、头像、地区及性别</view>
     <view class='buttons'>
@@ -63,4 +67,24 @@
       <button class='sure' open-type="getUserInfo" bindgetuserinfo="getUserInfo">允许</button>
     </view>
   </view>
-</authorization>
+</dialog>
+<dialog visible="{{setDialog}}" animation="animaton_bt" title="设置账户">
+  <view class='addRecord'>
+    <view class='form-item'>
+      <view class='form-label'>金额汇率</view>
+      <view class='form-content'>
+        <input bindinput="inputRate" value='{{rate}}' placeholder="1.00" type="digit" />
+      </view>
+    </view>
+    <view class='form-item'>
+      <view class='form-label'>账户符号</view>
+      <view class='form-content'>
+        <input bindinput="inputSymbol" value='{{symbol}}' placeholder="￥" />
+      </view>
+    </view>
+    <view class='save'>
+      <text bindtap='cancleS'>取消</text>
+      <text bindtap='saveS'>确定</text>
+    </view>
+  </view>
+</dialog>

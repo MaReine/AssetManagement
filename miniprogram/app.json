@@ -1,14 +1,6 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/home/index",
-    "pages/userConsole/userConsole",
-    "pages/storageConsole/storageConsole",
-    "pages/databaseGuide/databaseGuide",
-    "pages/addFunction/addFunction",
-    "pages/deployFunctions/deployFunctions",
-    "pages/chooseLib/chooseLib",
-    "pages/openapi/openapi",
     "pages/addAccount/addAccount",
     "pages/setup/setup",
     "pages/accountDetails/accountDetails"

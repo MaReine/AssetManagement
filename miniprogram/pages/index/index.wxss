@@ -18,7 +18,8 @@
 
 .sub-total .item {
   flex: 1;
-  padding: 16rpx 0 16rpx 32rpx;
+  padding: 16rpx 0;
+  text-align: center;
 }
 
 .sub-total .item .label {
@@ -52,10 +53,46 @@
 }
 
 .account-list {
+  position: relative;
   display: flex;
   padding: 16rpx 0;
   border-top: 1px solid #dcdcdc;
   background-color: #fff;
+  transition: transform 0.25s linear;
+}
+
+.account-list_active {
+  transform: translateX(-40%);
+}
+
+.account-list .operate {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  transform: translateX(100%);
+}
+
+.account-list .operate .btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 32rpx;
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 50%;
+  background-color: #fff;
+  font-size: 28rpx;
+}
+
+.account-list .operate .seting {
+  color: #606266;
+}
+
+.account-list .operate .delete {
+  color: #fc4c4c;
 }
 
 .account-list .left {
@@ -115,30 +152,21 @@
   font-weight: bold;
 }
 
-.add-asset {
-  margin: 32rpx 0;
-  padding: 16rpx 0;
-  color: #4691ee;
-  background-color: #fff;
+.footer-tips {
+  padding: 32rpx 0;
+  font-size: 24rpx;
+  color: #c0c4cc;
   text-align: center;
 }
 
-.add-asset text {
-  vertical-align: middle;
-}
-
-.add-asset .as {
-  font-size: 38rpx;
-}
-
 .authorization {
-  padding-bottom: 38rpx;
+  padding-bottom: 32rpx;
   width: 100%;
   background-color: #fff;
 }
 
 .authorization .tips {
-  padding: 38rpx 0;
+  padding: 48rpx 0;
   text-align: center;
   color: #07c160;
 }
@@ -150,9 +178,9 @@
 
 .authorization button {
   display: inline-block;
-  width: 40%;
-  height: 64rpx;
-  line-height: 64rpx;
+  width: 240rpx;
+  height: 72rpx;
+  line-height: 72rpx;
   font-size: 32rpx;
 }
 
@@ -164,4 +192,105 @@
 .authorization .sure {
   color: #fff;
   background-color: #07c160;
+}
+
+.add-float {
+  position: fixed;
+  right: 32rpx;
+  bottom: 32rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 88rpx;
+  height: 88rpx;
+  border-radius: 50%;
+  background-color: #f66;
+  animation-duration: 1s; /*动画持续时间*/
+  animation-iteration-count: 1; /*动画次数*/
+  animation-delay: 0s; /*延迟时间*/
+  animation-name: animation;
+}
+
+.add-float .as {
+  font-size: 46rpx;
+  color: #fff;
+}
+
+@keyframes animation {
+  from {
+    right: -32rpx;
+    bottom: -32rpx;
+    transform: rotate(0deg);
+  }
+
+  to {
+    right: 32rpx;
+    bottom: 32rpx;
+    transform: rotate(-360deg);
+  }
+}
+
+.addRecord .form-item {
+  display: flex;
+  padding: 32rpx 0;
+  align-items: center;
+  border-bottom: 1px solid #dcdcdc;
+}
+
+.addRecord .form-item:last-child {
+  border-bottom: none;
+}
+
+.addRecord .form-label {
+  padding-left: 32rpx;
+  width: 30%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content {
+  padding-right: 32rpx;
+  width: 70%;
+}
+
+.addRecord .form-content input {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content .picker {
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .form-content .picker .tips {
+  font-size: 24rpx;
+  color: #8e8e8e;
+}
+
+.addRecord .form-content textarea {
+  width: 100%;
+  font-size: 32rpx;
+  color: #323232;
+}
+
+.addRecord .save {
+  display: flex;
+  height: 88rpx;
+  line-height: 88rpx;
+  text-align: center;
+  font-size: 32rpx;
+}
+
+.addRecord .save text {
+  width: 50%;
+}
+
+.addRecord .save text:first-child {
+  color: #8e8e8e;
+  border-right: 1px solid #dcdcdc;
+}
+
+.addRecord .save text:last-child {
+  color: #4691ee;
 }

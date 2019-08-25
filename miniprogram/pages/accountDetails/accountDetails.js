@@ -7,7 +7,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-    dialogShow: false,
+    dialogShow: false, // 控制操作弹窗
+    updateDialog: false, // 更新余额弹窗
+    balanceMoney: "", // 更新的余额
     lastMoney: "0.00", // 余额
     accountInfo: null, // 账户信息
     inLabel: "收入", // 操作文案 
@@ -29,6 +31,12 @@ Page({
     this.setData({
       selectAccountIndex: e.detail.value
     })
+  },
+
+  inputBalanceMoney: function(e) {
+    this.setData({
+      balanceMoney: e.detail.value
+    });
   },
 
   inputRecordMoney: function(e) {
@@ -70,6 +78,12 @@ Page({
     });
   },
 
+  cancleU: function() {
+    this.setData({
+      updateDialog: false
+    });
+  },
+
   /**
    * 重置表单数据
    */
@@ -104,6 +118,85 @@ Page({
     return true;
   },
 
+  validateU: function() {
+    if (this.data.balanceMoney === "") {
+      wx.showToast({
+        title: "请输入金额",
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+    if (isNaN(Number(this.data.balanceMoney))) {
+      wx.showToast({
+        title: "请输入正确金额",
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+
+    if (Number(this.data.balanceMoney) == this.data.lastMoney) {
+      wx.showToast({
+        title: "余额未发生改变",
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+
+    return true;
+  },
+
+  saveU: function() {
+    if (this.validateU()) {
+      wx.showLoading({
+        title: '更新中...',
+      });
+      const transM = app.Calc(this.data.balanceMoney, 6);
+      const profit = app.Calc(transM, this.data.accountInfo.money, "-");
+      let profitType = 1; // 1 盈利 2 亏损 
+      if (profit < 0) {
+        profitType = 2;
+      }
+      const profitPercent = app.Calc(app.Calc(profit, this.data.accountInfo.money, "/") * 100, 2);
+      // 当前账户需要更新的参数
+      const params = {
+        updateMoney: transM,
+        profit: profit, // 账户收益
+        profitPercent: profitPercent, // 收益百分比 
+        profitType: profitType, // 收益类型 1 盈利 2 亏损 
+        updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
+      }
+      console.log("[账户详情] [更新账户参数]", params);
+      app.UpdateSingleData("accounts", this.data.accountInfo._id, params).then(res => {
+        console.log("[账户详情] [更新账户信息] 成功", res);
+        wx.showToast({
+          title: "更新成功",
+          icon: 'success',
+          duration: 1000
+        })
+        setTimeout(() => {
+          this.cancleU();
+          this.getSingleAccountInfo(0);
+          wx.setStorage({
+            key: "IndexUpdate",
+            data: true
+          })
+        }, 1000);
+      }).catch(err => {
+        console.log("[账户详情] [更新账户信息] 失败", err);
+        wx.showToast({
+          title: "更新失败",
+          icon: 'none',
+          duration: 1000
+        })
+      }).finally(() => {
+        wx.hideLoading();
+      });
+    }
+  },
+
   /**
    * 添加记录保存
    */
@@ -113,15 +206,18 @@ Page({
         title: '保存中...',
       });
 
+      const money = app.Calc(this.data.recordMoney, 6);
+
       // 新增记录参数
       const params = {
         _accountId: this.data.accountInfo._id, // 当前账户id
-        money: Number(this.data.recordMoney), // 记录金额
+        money: money, // 记录金额
+        symbol: this.data.accountInfo.symbol, // 符号
         remark: this.data.recordRemark, // 记录备注
         operateType: this.data.currentOpType, // 记录类型
         operateTypeName: this.data.currentOpTypeName, // 类型名称
-        currentAccountInfo: this.data.accountInfo, // 当前账户信息
-        selectAccountInfo: this.data.accountLists[this.data.selectAccountIndex], // 选择的账户信息
+        accountInfo: this.data.accountInfo, // 当前账户信息
+        relationAccountInfo: this.data.accountLists[this.data.selectAccountIndex], // 关联账户信息
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       };
 
@@ -139,8 +235,8 @@ Page({
           setTimeout(() => {
             this.cancle();
             this.resetParams();
-            this.updateAccount(params.currentAccountInfo, params.operateType, params.money);
-            this.updateSelectAccount();
+            this.updateAccount(params.accountInfo, params.operateType, params.money);
+            this.updateRelationAccount(params.relationAccountInfo, params.operateType, params.money);
           }, 1000);
         },
         fail: err => {
@@ -159,25 +255,12 @@ Page({
   },
 
   /**
-   * 删除一条记录
+   * 更新余额
    */
-  deleteRecord: function(e) {
-    const info = e.currentTarget.dataset.item;
-    let that = this;
-    wx.showModal({
-      title: '提示',
-      content: '删除记录会造成账户数据不准确,确认要删除吗？',
-      success(res) {
-        if (res.confirm) {
-          app.DeleteSingleData("account_details", info._id).then(res => {
-            console.log("[账户详情] [删除记录] 成功", res);
-            that.getSingleAccountInfo();
-          }).catch(err => {
-            console.log("[账户详情] [删除记录] 失败", err);
-          });
-        }
-      }
-    })
+  changeMoney: function() {
+    this.setData({
+      updateDialog: true
+    });
   },
 
   /**
@@ -191,19 +274,19 @@ Page({
     let updateMoney = a.updateMoney;
     if (a.attr === 2) {
       if (o === 1) {
-        money = (money * 10000 - Number(m) * 10000) / 10000;
-        updateMoney = (updateMoney * 10000 - Number(m) * 10000) / 10000;
+        money = app.Calc(money, m, "-");
+        updateMoney = app.Calc(updateMoney, m, "-");
       } else {
-        money = (money * 10000 + Number(m) * 10000) / 10000;
-        updateMoney = (updateMoney * 10000 + Number(m) * 10000) / 10000;
+        money = app.Calc(money, m, "+");
+        updateMoney = app.Calc(updateMoney, m, "+");
       }
     } else {
       if (o === 1) {
-        money = (money * 10000 + Number(m) * 10000) / 10000;
-        updateMoney = (updateMoney * 10000 + Number(m) * 10000) / 10000;
+        money = app.Calc(money, m, "+");
+        updateMoney = app.Calc(updateMoney, m, "+");
       } else {
-        money = (money * 10000 - Number(m) * 10000) / 10000;
-        updateMoney = (updateMoney * 10000 - Number(m) * 10000) / 10000;
+        money = app.Calc(money, m, "-");
+        updateMoney = app.Calc(updateMoney, m, "-");
       }
     }
     // 当前账户需要更新的参数
@@ -215,7 +298,7 @@ Page({
     console.log("[账户详情] [更新账户参数]", params);
     app.UpdateSingleData("accounts", a._id, params).then(res => {
       console.log("[账户详情] [更新账户信息] 成功", res);
-      this.getSingleAccountInfo();
+      this.getSingleAccountInfo(1);
       wx.setStorage({
         key: "IndexUpdate",
         data: true
@@ -226,29 +309,36 @@ Page({
   },
 
   /**
-   * 更新选择账户数据
+   * 更新关联账户数据
+   * params a[账户信息]
+   * params o[操作类型]
+   * parmas m[金额]
    */
-  updateSelectAccount: function() {
-    const accountInfo = this.data.accountLists[this.data.selectAccountIndex];
-    if (accountInfo.attr !== -1) {
+  updateRelationAccount: function(a, o, m) {
+    if (a.attr !== -1) {
+      // 获取当前账户信息
+      const currentA = this.data.accountInfo;
+      // 金额需要先转化成关联账户的汇率金额
+      const rmb = app.Calc(m, currentA.rate, "*");
+      const transM = app.Calc(app.Calc(rmb, a.rate, "/"), 6);
       // 先更新账户数据
-      let money = accountInfo.money;
-      let updateMoney = accountInfo.updateMoney;
-      if (accountInfo.attr === 2) {
-        if (this.data.currentOpType === 0) {
-          money = money - Number(this.data.recordMoney);
-          updateMoney = updateMoney - Number(this.data.recordMoney);
+      let money = a.money;
+      let updateMoney = a.updateMoney;
+      if (a.attr === 2) {
+        if (o === 0) {
+          money = app.Calc(money, transM, "-");
+          updateMoney = app.Calc(updateMoney, transM, "-");
         } else {
-          money = money + Number(this.data.recordMoney);
-          updateMoney = updateMoney + Number(this.data.recordMoney);
+          money = app.Calc(money, transM, "+");
+          updateMoney = app.Calc(updateMoney, transM, "+");
         }
       } else {
-        if (this.data.currentOpType === 0) {
-          money = money + Number(this.data.recordMoney);
-          updateMoney = updateMoney + Number(this.data.recordMoney);
+        if (o === 0) {
+          money = app.Calc(money, transM, "+");
+          updateMoney = app.Calc(updateMoney, transM, "+");
         } else {
-          money = money - Number(this.data.recordMoney);
-          updateMoney = updateMoney - Number(this.data.recordMoney);
+          money = app.Calc(money, transM, "-");
+          updateMoney = app.Calc(updateMoney, transM, "-");
         }
       }
       const params = {
@@ -256,7 +346,7 @@ Page({
         updateMoney: updateMoney,
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       }
-      app.UpdateSingleData("accounts", accountInfo._id, params).then(res => {
+      app.UpdateSingleData("accounts", a._id, params).then(res => {
         console.log("[账户详情] [更新关联账户信息] 成功", res);
       }).catch(err => {
         console.log("[账户详情] [更新关联账户信息] 失败", err);
@@ -266,13 +356,13 @@ Page({
       // 新增记录参数
       let opType = -1,
         opTypeName = "";
-      if (this.data.currentOpType === 1) {
+      if (o === 1) {
         opType = 0;
-      } else if (this.data.currentOpType === 0) {
+      } else if (o === 0) {
         opType = 1;
       }
 
-      switch (accountInfo.attr) {
+      switch (a.attr) {
         case 0:
           if (opType == 1) {
             opTypeName = "转入";
@@ -297,13 +387,14 @@ Page({
       }
 
       const recordParams = {
-        _accountId: accountInfo._id, // 当前账户id
-        money: Number(this.data.recordMoney), // 记录金额
+        _accountId: a._id, // 当前账户id
+        money: transM, // 记录金额
+        symbol: a.symbol, // 符号
         remark: "", // 记录备注
         operateType: opType, // 记录类型
         operateTypeName: opTypeName, // 类型名称
-        currentAccountInfo: accountInfo, // 当前账户信息
-        selectAccountInfo: this.data.accountInfo, // 选择的账户信息
+        accountInfo: a, // 当前账户信息
+        relationAccountInfo: currentA, // 选择的账户信息
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       };
 
@@ -366,8 +457,9 @@ Page({
 
   /**
    * 获取单个的账户信息
+   * @parms t 0 更新余额 1 添加记录
    */
-  getSingleAccountInfo: function() {
+  getSingleAccountInfo: function(t) {
     app.GetSingleData("accounts", this.data.accountInfo._id).then(res => {
       console.log("[账户详情] [查询单条账户信息] 成功", res);
       if (res && res.data) {
@@ -375,7 +467,9 @@ Page({
           lastMoney: app.get_thousand_num(res.data.updateMoney),
           accountInfo: res.data
         });
-        this.getRecordLists(res.data._id);
+        if (t === 1) {
+          this.getRecordLists(res.data._id);
+        }
       }
     }).catch(err => {
       console.log("[账户详情] [查询单条账户信息] 失败", err);

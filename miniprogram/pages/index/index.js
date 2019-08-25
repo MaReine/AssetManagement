@@ -8,12 +8,195 @@ Page({
    */
   data: {
     isLogin: false,
+    setDialog: false,
     totalAssets: "0.00", // 总资产
     fixedAssets: "0.00", // 固定资产
     floatAssets: "0.00", // 浮动资产
     liabilities: "0.00", // 负债
     lists: [], // 账户列表
+    currentAccount: { // 当前选择的账户
+      index: -1,
+      type: -1
+    },
+    currentAccountInfo: null,
+    rate: "", // 汇率
+    symbol: "", // 符号
     jumpUrl: "" // 授权后要跳转的界面
+  },
+  reset: function() {
+    this.setData({
+      isLogin: false,
+      setDialog: false,
+      totalAssets: "0.00", // 总资产
+      fixedAssets: "0.00", // 固定资产
+      floatAssets: "0.00", // 浮动资产
+      liabilities: "0.00", // 负债
+      lists: [], // 账户列表
+      currentAccount: { // 当前选择的账户
+        index: -1,
+        type: -1
+      },
+      currentAccountInfo: null,
+      rate: "", // 汇率
+      symbol: "", // 符号
+      jumpUrl: "" // 授权后要跳转的界面
+    });
+  },
+  inputRate: function(e) {
+    this.setData({
+      rate: e.detail.value
+    });
+  },
+  inputSymbol: function(e) {
+    this.setData({
+      symbol: e.detail.value
+    });
+  },
+  // 长按显示操作按钮
+  operate: function(e) {
+    const info = JSON.parse(e.currentTarget.dataset.index);
+    if (this.data.currentAccount.index === info.index && this.data.currentAccount.type === info.type) {
+      this.setData({
+        currentAccount: {
+          index: -1,
+          type: -1
+        }
+      });
+    } else {
+      this.setData({
+        currentAccount: {
+          index: info.index,
+          type: info.type
+        }
+      });
+    }
+  },
+  // 删除账户
+  deleteAccount: function() {
+    const _self = this;
+    wx.showModal({
+      title: '提示',
+      content: '此账户所有数据都会被删除！',
+      success(res) {
+        if (res.confirm) {
+          let _id = null;
+          _self.data.lists.map(item => {
+            if (item.type === _self.data.currentAccount.type) {
+              _id = item.items[_self.data.currentAccount.index]._id;
+            }
+          });
+          console.log(_id);
+          app.DeleteSingleData('accounts', _id).then(res => {
+            console.log("[首页] [删除账户] 成功", res);
+            wx.cloud.callFunction({
+              name: 'dbRemove',
+              data: {
+                name: "account_details",
+                params: {
+                  _accountId: _id
+                }
+              },
+              success: res => {
+                console.log("[首页] [删除记录] 成功", res);
+                wx.showToast({
+                  title: "删除成功",
+                  icon: 'success',
+                  duration: 1000
+                })
+                setTimeout(() => {
+                  _self.getAccountLists(app.globalData.openid);
+                }, 1000);
+              },
+              fail: err => {
+                console.error("[首页] [删除记录] 成功", err);
+              }
+            })
+          }).catch(err => {
+            console.error("[首页] [删除账户] 失败", err);
+            wx.showToast({
+              title: "删除失败",
+              icon: 'success',
+              duration: 1000
+            })
+          });
+        }
+      }
+    })
+  },
+  // 设置账户
+  setAccount: function() {
+    let info = null;
+    this.data.lists.map(item => {
+      if (item.type === this.data.currentAccount.type) {
+        info = item.items[this.data.currentAccount.index];
+      }
+    });
+    this.setData({
+      setDialog: true,
+      rate: info.rate,
+      symbol: info.symbol,
+      currentAccountInfo: info
+    });
+
+  },
+  /**
+   * 表单验证
+   */
+  validate: function() {
+    if (this.data.rate && isNaN(Number(this.data.rate))) {
+      wx.showToast({
+        title: "汇率只能为数字!",
+        icon: 'none',
+        duration: 2000
+      })
+      return false;
+    }
+
+    return true;
+  },
+  cancleS: function() {
+    this.setData({
+      setDialog: false
+    });
+  },
+  saveS: function() {
+    if (this.validate()) {
+      wx.showLoading({
+        title: '设置中...',
+      });
+      const params = {
+        rate: this.data.rate !== "" ? Number(this.data.rate) : 1.00,
+        symbol: this.data.symbol || "￥",
+        updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
+      }
+      app.UpdateSingleData("accounts", this.data.currentAccountInfo._id, params).then(res => {
+        console.log("[账户详情] [更新账户信息] 成功", res);
+        wx.showToast({
+          title: "设置成功",
+          icon: 'success',
+          duration: 1000
+        })
+        setTimeout(() => {
+          this.cancleS();
+          this.getAccountLists(app.globalData.openid);
+          this.setData({
+            currentAccount: {
+              index: -1,
+              type: -1
+            }
+          });
+        }, 1000);
+      }).catch(err => {
+        console.error("[账户详情] [更新账户信息] 失败", err);
+        wx.showToast({
+          title: "设置失败",
+          icon: 'none',
+          duration: 1000
+        })
+      }).finally(() => {
+        wx.hideLoading();
+      });
+    }
   },
   /**
    * 跳转新增账户页面
@@ -170,6 +353,8 @@ Page({
             lists: resList
           });
           console.log('[首页] [账户列表] : ', resList)
+        } else {
+          this.reset();
         }
       },
       fail: err => {

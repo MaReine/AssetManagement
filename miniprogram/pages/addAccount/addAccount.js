@@ -103,10 +103,11 @@ Page({
       wx.showLoading({
         title: '保存中...',
       });
+      const money = app.Calc(this.data.money, 6);
       const params = {
         name: this.data.name, // 账户名称
-        money: Number(this.data.money), // 账户金额
-        updateMoney: Number(this.data.money), // 账户最新的金额
+        money: money, // 账户金额
+        updateMoney: money, // 账户最新的金额
         rate: this.data.rate !== "" ? Number(this.data.rate) : 1.00,
         symbol: this.data.symbol || "￥",
         profit: 0, // 账户收益
