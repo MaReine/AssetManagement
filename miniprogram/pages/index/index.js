@@ -21,6 +21,7 @@ Page({
     currentAccountInfo: null,
     rate: "", // 汇率
     symbol: "", // 符号
+    remark: "",
     jumpUrl: "" // 授权后要跳转的界面
   },
   reset: function() {
@@ -39,7 +40,13 @@ Page({
       currentAccountInfo: null,
       rate: "", // 汇率
       symbol: "", // 符号
+      remark: "",
       jumpUrl: "" // 授权后要跳转的界面
+    });
+  },
+  inputRemark: function(e) {
+    this.setData({
+      remark: e.detail.value
     });
   },
   inputRate: function(e) {
@@ -135,6 +142,7 @@ Page({
       setDialog: true,
       rate: info.rate,
       symbol: info.symbol,
+      remark: info.remark,
       currentAccountInfo: info
     });
 
@@ -167,6 +175,7 @@ Page({
       const params = {
         rate: this.data.rate !== "" ? Number(this.data.rate) : 1.00,
         symbol: this.data.symbol || "￥",
+        remark: this.data.remark,
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       }
       app.UpdateSingleData("accounts", this.data.currentAccountInfo._id, params).then(res => {
