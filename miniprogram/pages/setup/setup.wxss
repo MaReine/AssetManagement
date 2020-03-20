@@ -1,6 +1,6 @@
 .header {
   padding-bottom: 32rpx;
-  background-color: #ff461f;
+  background-color: #FC4C4C;
 }
 
 .header .avatar {

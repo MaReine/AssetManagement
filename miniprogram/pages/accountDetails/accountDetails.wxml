@@ -24,12 +24,12 @@
 </view>
 <view class='account-remark' wx:if="{{accountInfo.remark}}">备注：{{accountInfo.remark}}</view>
 <view class='container' wx:if="{{lists.length !== 0}}">
-  <view class="timeline-item" wx:for="{{lists}}" wx:for-item="item" wx:key="{{item._id}}">
+  <view class="timeline-item" wx:for="{{lists}}" wx:for-item="item" wx:key="_id">
     <view class="left buy" wx:if="{{item.operateType === 1}}">{{inLabel}}</view>
     <view class="left sale" wx:else>{{outLabel}}</view>
     <view class="right">
       <view class="date">{{item.updateDate}}
-        <!-- <text bindtap="deleteRecord" data-item="{{item}}" class='as icon-shanchu'></text> -->
+        <text bindtap="deleteRecord" data-item="{{item}}" class='as icon-shanchu'></text>
       </view>
       <view class="info buy" wx:if="{{item.operateType === 1}}">
         <view class="info-item">

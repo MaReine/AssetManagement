@@ -58,11 +58,7 @@
   padding: 16rpx 0;
   border-top: 1px solid #dcdcdc;
   background-color: #fff;
-  transition: transform 0.25s linear;
-}
-
-.account-list_active {
-  transform: translateX(-40%);
+  transition: transform 0.18s linear;
 }
 
 .account-list .operate {

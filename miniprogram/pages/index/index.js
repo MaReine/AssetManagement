@@ -22,7 +22,10 @@ Page({
     rate: "", // 汇率
     symbol: "", // 符号
     remark: "",
-    jumpUrl: "" // 授权后要跳转的界面
+    jumpUrl: "", // 授权后要跳转的界面
+    // 左滑参数
+    startX: 0,
+    currentTouch: ''
   },
   reset: function() {
     this.setData({
@@ -59,24 +62,46 @@ Page({
       symbol: e.detail.value
     });
   },
-  // 长按显示操作按钮
-  operate: function(e) {
-    const info = JSON.parse(e.currentTarget.dataset.index);
-    if (this.data.currentAccount.index === info.index && this.data.currentAccount.type === info.type) {
-      this.setData({
-        currentAccount: {
-          index: -1,
-          type: -1
+  /**左滑效果实现 */
+  touchS(e) {
+    if (e.touches.length) {
+      const info = JSON.parse(e.currentTarget.dataset.index);
+      let currentAccount = 'lists['
+      this.data.lists.forEach((item, i) => {
+        if (item.type === info.type) {
+          currentAccount = currentAccount + i + '].items['
         }
-      });
-    } else {
+      })
+      currentAccount = currentAccount + info.index + '].translateX'
       this.setData({
-        currentAccount: {
-          index: info.index,
-          type: info.type
-        }
-      });
+        startX: e.touches[0].clientX,
+        currentTouch: currentAccount
+      })
     }
+  },
+  touchM(e) {
+    if (e.touches.length) {
+      const moveX = e.touches[0].clientX
+      const disX = this.data.startX - moveX
+      const params = {}
+      if (disX === 0 || disX < 0) { // 小于0说明是向右滑
+        params[this.data.currentTouch] = '0rpx'
+      } else if (disX <= 60) {
+        params[this.data.currentTouch] = -disX + 'rpx'
+      } else {
+        params[this.data.currentTouch] = '-40%'
+      }
+      this.setData(params)
+    }
+  },
+  touchE(e) {
+    const info = JSON.parse(e.currentTarget.dataset.index);
+    this.setData({
+      currentAccount: {
+        index: info.index,
+        type: info.type
+      }
+    });
   },
   // 删除账户
   deleteAccount: function() {
@@ -256,6 +281,10 @@ Page({
     // console.log(e)
     if (e.detail.userInfo) {
       app.globalData.userInfo = e.detail.userInfo;
+      wx.setStorage({
+        key: "IndexUpdate",
+        data: true
+      })
       wx.showToast({
         title: "授权成功",
         icon: 'success',
@@ -289,7 +318,7 @@ Page({
       _openid: id
     }).orderBy('updateDate', 'desc').get({
       success: res => {
-        console.log('[首页] [查询账户列表] 成功: ', res)
+        // console.log('[首页] [查询账户列表] 成功: ', res)
         if (res.data.length !== 0) {
           let resList = [],
             totalList = [],
@@ -304,6 +333,7 @@ Page({
             // 先转化成人民币
             const rmb = app.Calc(app.Calc(item.updateMoney, item.rate, "*"), 2);
             item.showDate = item.updateDate.split(" ")[0];
+            item.translateX = "0rpx"
             switch (item.attr) {
               case 0: // 固定资产
                 fixedAssets = app.Calc(fixedAssets, rmb, "+");
@@ -361,7 +391,7 @@ Page({
             liabilities: app.get_thousand_num(liabilities),
             lists: resList
           });
-          console.log('[首页] [账户列表] : ', resList)
+          // console.log('[首页] [账户列表] : ', resList)
         } else {
           this.reset();
         }
@@ -378,16 +408,18 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    let openid = app.globalData.openid;
-    if (!openid) {
-      app.openidReadyCallback = res => {
-        openid = res;
-        console.log('[回调openid]', openid);
+    app.userInfoReadyCallback = res => {
+      let openid = app.globalData.openid;
+      if (!openid) {
+        app.openidReadyCallback = res => {
+          openid = res;
+          // console.log('[回调openid]', openid);
+          this.getAccountLists(openid);
+        }
+      } else {
+        // console.log('[openid]', openid);
         this.getAccountLists(openid);
       }
-    } else {
-      console.log('[openid]', openid);
-      this.getAccountLists(openid);
     }
   },
 

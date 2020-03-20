@@ -168,9 +168,9 @@ Page({
         profitType: profitType, // 收益类型 1 盈利 2 亏损 
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       }
-      console.log("[账户详情] [更新账户参数]", params);
+      // console.log("[账户详情] [更新账户参数]", params);
       app.UpdateSingleData("accounts", this.data.accountInfo._id, params).then(res => {
-        console.log("[账户详情] [更新账户信息] 成功", res);
+        // console.log("[账户详情] [更新账户信息] 成功", res);
         wx.showToast({
           title: "更新成功",
           icon: 'success',
@@ -196,7 +196,50 @@ Page({
       });
     }
   },
-
+  /**
+   * 删除记录
+   */
+  deleteRecord: function(e) {
+    const item = e.currentTarget.dataset.item
+    wx.showModal({
+      title: '提示',
+      content: '确认删除这条记录？',
+      success: res => {
+        if (res.confirm) {
+          // console.log(item)
+          app.DeleteSingleData('account_details', item._id).then(res => {
+            // console.log("[账户详情] [删除记录] 成功", res);
+            wx.showToast({
+              title: "删除成功",
+              icon: 'success',
+              duration: 1000
+            })
+            setTimeout(() => {
+              const operateType = item.operateType ? 0 : 1
+              // 删除后更新当前账户信息
+              this.updateAccount(this.data.accountInfo, operateType, item.money);
+              // 删除关联记录
+              app.DeleteSingleData('account_details', item.relationRecordId).then(res => {
+                // console.log("[账户详情] [删除关联记录] 成功", res)
+                app.GetSingleData("accounts", item.relationAccountInfo._id).then(res => {
+                  // console.log("[账户详情] [查询单条账户信息] 成功", res);
+                  // 更新关联账户信息
+                  this.updateAccount(res.data, item.operateType, item.money);
+                })
+              })
+            }, 1000)
+          }).catch(err => {
+            console.log("[账户详情] [删除记录] 失败", err);
+            wx.showToast({
+              title: "删除失败",
+              icon: 'none',
+              duration: 1000
+            })
+          })
+        }
+      },
+    })
+  },
   /**
    * 添加记录保存
    */
@@ -218,15 +261,16 @@ Page({
         operateTypeName: this.data.currentOpTypeName, // 类型名称
         accountInfo: this.data.accountInfo, // 当前账户信息
         relationAccountInfo: this.data.accountLists[this.data.selectAccountIndex], // 关联账户信息
+        relationRecordId: "", // 关联记录id
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       };
 
-      console.log("[账户详情] [添加记录]", params);
+      // console.log("[账户详情] [添加记录]", params);
       const db = wx.cloud.database()
       db.collection('account_details').add({
         data: params,
         success: res => {
-          console.log('[添加记录成功] ', res);
+          // console.log('[添加记录成功] ', res);
           wx.showToast({
             title: "保存成功",
             icon: 'success',
@@ -236,7 +280,7 @@ Page({
             this.cancle();
             this.resetParams();
             this.updateAccount(params.accountInfo, params.operateType, params.money);
-            this.updateRelationAccount(params.relationAccountInfo, params.operateType, params.money);
+            this.updateRelationAccount(params.relationAccountInfo, params.operateType, params.money, res._id);
           }, 1000);
         },
         fail: err => {
@@ -272,7 +316,7 @@ Page({
   updateAccount: function(a, o, m) {
     let money = a.money;
     let updateMoney = a.updateMoney;
-    if (a.attr === 2) {
+    if (a.attr === 2) { // 负债
       if (o === 1) {
         money = app.Calc(money, m, "-");
         updateMoney = app.Calc(updateMoney, m, "-");
@@ -295,10 +339,12 @@ Page({
       updateMoney: updateMoney,
       updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
     }
-    console.log("[账户详情] [更新账户参数]", params);
+    // console.log("[账户详情] [更新账户参数]", params);
     app.UpdateSingleData("accounts", a._id, params).then(res => {
-      console.log("[账户详情] [更新账户信息] 成功", res);
-      this.getSingleAccountInfo(1);
+      // console.log("[账户详情] [更新账户信息] 成功", res);
+      if (a._id === this.data.accountInfo._id) {
+        this.getSingleAccountInfo(1);
+      }
       wx.setStorage({
         key: "IndexUpdate",
         data: true
@@ -314,7 +360,7 @@ Page({
    * params o[操作类型]
    * parmas m[金额]
    */
-  updateRelationAccount: function(a, o, m) {
+  updateRelationAccount: function(a, o, m, recordId) {
     if (a.attr !== -1) {
       // 获取当前账户信息
       const currentA = this.data.accountInfo;
@@ -347,7 +393,7 @@ Page({
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       }
       app.UpdateSingleData("accounts", a._id, params).then(res => {
-        console.log("[账户详情] [更新关联账户信息] 成功", res);
+        // console.log("[账户详情] [更新关联账户信息] 成功", res);
       }).catch(err => {
         console.log("[账户详情] [更新关联账户信息] 失败", err);
       });
@@ -395,15 +441,21 @@ Page({
         operateTypeName: opTypeName, // 类型名称
         accountInfo: a, // 当前账户信息
         relationAccountInfo: currentA, // 选择的账户信息
+        relationRecordId: recordId, // 当前新增的记录id
         updateDate: app.dateFormat('yyyy-MM-dd hh:mm:ss') // 更新时间
       };
 
-      console.log("[账户详情] [添加关联记录]", recordParams);
+      // console.log("[账户详情] [添加关联记录]", recordParams);
       const db = wx.cloud.database()
       db.collection('account_details').add({
         data: recordParams,
         success: res => {
-          console.log('[账户详情] [添加关联记录成功] ', res);
+          // console.log('[账户详情] [添加关联记录成功] ', res);
+          app.UpdateSingleData('account_details', recordId, {
+            relationRecordId: res._id
+          }).then(res => {
+            // console.log('[账户详情] [更新新增记录成功]', res)
+          })
         },
         fail: err => {
           console.error('[账户详情] [添加关联记录失败] ', err);
@@ -421,7 +473,7 @@ Page({
       _openid: id
     }).orderBy('updateDate', 'desc').get({
       success: res => {
-        console.log('[账户详情] [查询账户列表] 成功: ', res)
+        // console.log('[账户详情] [查询账户列表] 成功: ', res)
         if (res.data.length !== 0) {
           let resList = [],
             fixedList = [],
@@ -461,7 +513,7 @@ Page({
    */
   getSingleAccountInfo: function(t) {
     app.GetSingleData("accounts", this.data.accountInfo._id).then(res => {
-      console.log("[账户详情] [查询单条账户信息] 成功", res);
+      // console.log("[账户详情] [查询单条账户信息] 成功", res);
       if (res && res.data) {
         this.setData({
           lastMoney: app.get_thousand_num(res.data.updateMoney),
@@ -488,10 +540,14 @@ Page({
       _accountId: id
     }).orderBy('updateDate', 'desc').get({
       success: res => {
-        console.log('[账户详情] [查询记录列表] 成功: ', res)
+        // console.log('[账户详情] [查询记录列表] 成功: ', res)
         if (res.data.length !== 0) {
           this.setData({
             lists: res.data
+          });
+        } else {
+          this.setData({
+            lists: []
           });
         }
       },
@@ -527,7 +583,7 @@ Page({
       key: 'AccountInfo',
       success(res) {
         if (res.data) {
-          console.log("[账户详情] [账户信息]", res.data);
+          // console.log("[账户详情] [账户信息]", res.data);
           switch (res.data.attr) {
             case 0:
               that.setData({

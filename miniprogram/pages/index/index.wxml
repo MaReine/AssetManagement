@@ -16,9 +16,10 @@
     <view class='money'>{{liabilities}}￥</view>
   </view>
 </view>
-<view class='account-group' wx:for="{{lists}}" wx:for-item="item" wx:key="{{item.type}}">
+<view class='account-group' wx:for="{{lists}}" wx:for-item="item" wx:key="type">
   <view class='group-label'>{{item.typeName}}({{item.totalMoney}}￥)</view>
-  <view class='account-list {{(currentAccount.index === index && currentAccount.type === item.type) ? "account-list_active" : ""}}' wx:for="{{item.items}}" wx:for-item="list" wx:key="{{list._id}}" catchlongtap="operate" data-index='{"index":{{index}},"type":{{item.type}}}'>
+  <view style="transform: translateX({{list.translateX}})" class='account-list' wx:for="{{item.items}}" wx:for-item="list" wx:key="_id"
+    bindtouchstart="touchS" bindtouchmove="touchM" bindtouchend="touchE" data-index='{"index":{{index}},"type":{{item.type}}}'>
     <view class='left' wx:if="{{list.attr === 1}}">
       <view class='account-name'>{{list.name}}</view>
       <view class='account-info'>
@@ -61,7 +62,7 @@
 </view>
 <dialog visible="{{isLogin}}" animation="animaton_bt" title="资金管理 申请">
   <view class='authorization'>
-    <view class='tips'>获取你的昵称、头像、地区及性别</view>
+    <view class='tips'>获取您的昵称、头像、地区及性别</view>
     <view class='buttons'>
       <button class='cancle' bindtap='cancle'>取消</button>
       <button class='sure' open-type="getUserInfo" bindgetuserinfo="getUserInfo">允许</button>
